@@ -1,12 +1,12 @@
 <div class="flight-container">
-  <h2> Flight Calendar</h2>
+  <h2>Flight Calendar - Cheapest fare</h2>
   <div class="flight-dd-container">
     <div class="d-inline-block" ngbDropdown #oridinDrop="ngbDropdown">
       <button class="btn btn-outline-primary mr-2 flight-dropdown-width" id="dropdownManual" ngbDropdownAnchor
         (focus)="oridinDrop.open()">{{origin}}</button>
       <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button ngbDropdownItem value="SIN" (click)="changeOrigin('Singapoore')">Singapore</button>
-        <button ngbDropdownItem value="KUL" (click)="changeOrigin('Kuala Lumpur')">Kuala Lumpur</button>
+        <button ngbDropdownItem value="SIN" (click)="changeOrigin($event)">Singapore</button>
+        <button ngbDropdownItem value="KUL" (click)="changeOrigin($event)">Kuala Lumpur</button>
       </div>
     </div>
 
@@ -14,12 +14,13 @@
       <button class="btn btn-outline-primary mr-2 flight-dropdown-width" id="dropdownManual" ngbDropdownAnchor
         (focus)="destinationDrop.open()">{{destination}}</button>
       <div ngbDropdownMenu aria-labelledby="dropdownManual">
-        <button ngbDropdownItem value="SIN" (click)="changeDestination('Singapoore')">Singapore</button>
-        <button ngbDropdownItem value="KUL" (click)="changeDestination('Kuala Lumpur')">Kuala Lumpur</button>
-        <button ngbDropdownItem value="SFO" (click)="changeDestination('San Francisco')">San Francisco</button>
+        <button ngbDropdownItem value="SIN" (click)="changeDestination($event)">Singapore</button>
+        <button ngbDropdownItem value="KUL" (click)="changeDestination($event)">Kuala Lumpur</button>
+        <button ngbDropdownItem value="SFO" (click)="changeDestination($event)">San Francisco</button>
       </div>
     </div>
-    <button (click)="getFlightDetail()" [disabled]="invalidRoute" type="button" class="btn btn-primary">Primary</button>
+    <button (click)="getFlightDetail()" [disabled]="!locationSelected" type="button" class="btn btn-primary">Search
+      Flight</button>
   </div>
 
   <div class="errorMsg" *ngIf="invalidRoute">Origin and destination should not be same</div>
@@ -27,9 +28,24 @@
   <div class="flight-calendar-container">
     <div *ngFor="let row of rows" class="flight-calendar-rows">
       <div *ngFor="let weekDay of columns" class="flight-day">
-          <!-- <span>{{dayCounter(dayItem)}}</span> -->
-          {{allDates[row][weekDay].date}}
-          {{days[allDates[row][weekDay].day]}}
+        <!-- <span>{{dayCounter(dayItem)}}</span> -->
+        <div class="dayDate">
+          <span>{{allDates[row][weekDay].date}}/{{allDates[row][weekDay].month}}</span>
+          <span>{{days[allDates[row][weekDay].day]}}</span>
+        </div>
+        <div *ngIf="allDates[row][weekDay].flightPrice; else noflight" class="flight-rate">
+          <span>
+            Fare
+          </span>
+          <span>
+            {{allDates[row][weekDay].flightPrice | currency}}
+          </span>
+        </div>
+        <ng-template #noflight>
+          <span class="no-flight">
+            No Flights Available
+          </span>
+        </ng-template>
       </div>
     </div>
   </div>

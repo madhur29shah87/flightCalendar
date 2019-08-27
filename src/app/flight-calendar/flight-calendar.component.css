@@ -54,10 +54,26 @@ h2 {
     background:linear-gradient(135deg, #c4ecfb 0%,#9dbefd 100%);
 
     margin: 5px;
-    padding: 10px;
+    padding: 6px;
     border-radius: 5px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.dayDate {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.flight-rate {
+    display: flex;
+    justify-content: space-between;
+}
+
+.no-flight {
+    font-size: 14px;
 }
 
 .flight-calendar-rows {
