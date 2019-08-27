@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DateData } from '../dateData';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { FlightService } from '../flight.service';
 
 @Component({
   selector: 'app-flight-calendar',
@@ -14,28 +13,18 @@ export class FlightCalendarComponent implements OnInit {
   invalidRoute: boolean = false;
   rows: number[] = [0, 1, 2, 3, 4];
   columns: number[] = [0, 1, 2, 3, 4, 5, 6];
-  days: String[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   dayItem: number = 0;
-
   locationSelected: boolean = false;
-
-  readonly ROOT_URL = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/pricing/uk2/v1.0/";
-  readonly country = "US";
-  readonly currency = "USD";
-  readonly locale = "en-US";
-  QUOTES_URL: string = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/" + this.country + "/" + this.currency + "/" + this.locale + "/";
-  //ROUTE_URL: string = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browseroutes/v1.0/" + this.country + "/" + this.currency + "/" + this.locale + "/";
-
-  selectedOrigin: String = "SIN";
-  selectedDestination: String = "KUL";
-
+  selectedOrigin: string;
+  selectedDestination: string;
   outboundpartialdate: string = this.getTodaysDate();
 
-  quiteDetails: {
-    flightNumber: number,
-    price: number,
-    flightName: string
-  };
+  constructor(private flightService: FlightService) { }
+
+  ngOnInit() {
+    this.getDates();
+  }
 
   getTodaysDate(): string {
     let date = new Date();
@@ -48,31 +37,15 @@ export class FlightCalendarComponent implements OnInit {
     let year = date.getFullYear();
     return year + "-" + month + "-" + day;
   }
-  // outboundpartialdate: string = "2019-08-27";
-
-  browsequotes: any;
-
-  // posts: Observable<any>;
 
 
   getFlightDetail() {
-    // let params = new HttpParams();
-    let headers = new HttpHeaders({
-      "x-rapidapi-host": "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-      "x-rapidapi-key": "cb1422ffc0msh6c2795240f66f6ep176724jsn5cf289092410",
-      "content-type": "application/x-www-form-urlencoded"
-    });
-    let tempUrl = this.QUOTES_URL + this.selectedOrigin + "/" + this.selectedDestination + "/" + this.outboundpartialdate;
-    // this.http.get(this.ROOT_URL + 'dade2fea-2399-4627-9127-46b2dcd2ea47',
-    //   { headers: headers, params: { 'originAirports': 'SIN', 'destinationAirports': 'KUL' } }).subscribe();
-
-    // this.http.get<any>(tempUrl, { headers: headers }).subscribe(data => this.sortData(data));
-    this.http.get<any>(tempUrl, { headers: headers }).subscribe((response) => {
-      this.sortData(response);
-    },
-      (error) => {
-        console.log('------->' + error.message);
-      });
+    this.flightService.getQuotes(this.selectedOrigin, this.selectedDestination, this.outboundpartialdate).subscribe(
+      (data) => {
+        this.sortData(data);
+      },
+      (error) => { }
+    );
   }
 
   sortData(quotes) {
@@ -100,11 +73,7 @@ export class FlightCalendarComponent implements OnInit {
     }
   }
 
-  constructor(private http: HttpClient) { }
 
-  ngOnInit() {
-    this.getDates();
-  }
 
   dateData: DateData = null;
   allDates: DateData[][] = [];
