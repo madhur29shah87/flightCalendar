@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DateData } from '../dateData';
 import { FlightService } from '../flight.service';
+import { PassDataService } from '../pass-data.service';
 
 @Component({
   selector: 'app-flight-calendar',
@@ -8,21 +9,26 @@ import { FlightService } from '../flight.service';
   styleUrls: ['./flight-calendar.component.css']
 })
 export class FlightCalendarComponent implements OnInit {
-  origin: string = "Select Origin";
-  destination: string = "Select Destination";
-  invalidRoute: boolean = false;
+  
   rows: number[] = [0, 1, 2, 3, 4];
   columns: number[] = [0, 1, 2, 3, 4, 5, 6];
   days: string[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   dayItem: number = 0;
-  locationSelected: boolean = false;
   selectedOrigin: string;
   selectedDestination: string;
   outboundpartialdate: string = this.getTodaysDate();
+  dateData: DateData = null;
+  allDates: DateData[][] = [];
 
-  constructor(private flightService: FlightService) { }
+  constructor(private flightService: FlightService, private passDataService: PassDataService) { }
 
   ngOnInit() {
+    this.passDataService.searchDataEmitter.subscribe(
+      (searchData) => {
+        this.selectedOrigin = searchData.selectedOrigin;
+        this.selectedDestination = searchData.selectedDestination;
+        this.getFlightDetail();
+      });
     this.getDates();
   }
 
@@ -50,11 +56,8 @@ export class FlightCalendarComponent implements OnInit {
 
   sortData(quotes) {
     let quoteArray: number[] = [];
-    // let quotes = route.Quotes;
     if (quotes && quotes.Quotes && quotes.Quotes.length > 0) {
       quotes.Quotes.forEach(quote => {
-        // quoteArray.push(quote.MinPrice);
-        console.log('-->' + quote.MinPrice);
         this.allDates.forEach(element => {
           let dateData = element.filter(x => x.yyyymmdd === quote.OutboundLeg.DepartureDate.split('T')[0]);
           if (dateData[0]) {
@@ -75,8 +78,7 @@ export class FlightCalendarComponent implements OnInit {
 
 
 
-  dateData: DateData = null;
-  allDates: DateData[][] = [];
+
 
   getDates() {
     let day = new Date();
@@ -103,23 +105,6 @@ export class FlightCalendarComponent implements OnInit {
       }
     }
   }
-  changeOrigin(event) {
-    this.origin = event.target.innerText;
-    this.selectedOrigin = event.target.value;
-    this.originDestValid();
-  }
-
-  changeDestination(event) {
-    this.destination = event.target.innerText;
-    this.selectedDestination = event.target.value;
-    this.originDestValid();
-  }
-
-  originDestValid() {
-    if (this.origin != "Select Origin" && this.destination != "Select Destination") {
-      this.invalidRoute = (this.origin === this.destination) ? true : false;
-      this.locationSelected = (this.origin !== this.destination);
-    }
-  }
+  
 
 }
