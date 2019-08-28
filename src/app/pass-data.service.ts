@@ -7,7 +7,7 @@ import { SearchData } from './searchData';
 export class PassDataService {
 
   searchDataEmitter = new EventEmitter();
-
+  // Dispatch data for other component
   dispatchEventData(searchData: SearchData){
     this.searchDataEmitter.emit(searchData);
   }

@@ -1,7 +1,6 @@
 <div class="flight-calendar-container">
   <div *ngFor="let row of rows" class="flight-calendar-rows">
     <div *ngFor="let weekDay of columns" class="flight-day">
-      <!-- <span>{{dayCounter(dayItem)}}</span> -->
       <div class="dayDate">
         <span>{{allDates[row][weekDay].date}}/{{allDates[row][weekDay].month}}</span>
         <span>{{days[allDates[row][weekDay].day]}}</span>

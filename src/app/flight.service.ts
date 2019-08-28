@@ -13,7 +13,8 @@ export class FlightService {
   readonly QUOTES_URL: string = "https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/" + this.country + "/" + this.currency + "/" + this.locale + "/";
 
   constructor(private http: HttpClient) { }
-
+  // service to do the API calls. Added required headers
+  // Used browsequotes GET service to fetch data for route of 1 day
   getQuotes(selectedOrigin: string, selectedDestination: string, outboundpartialdate: string) {
     let tempUrl = this.QUOTES_URL + selectedOrigin + "/" + selectedDestination + "/" + outboundpartialdate;
     let headers = new HttpHeaders({
