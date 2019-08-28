@@ -1,7 +1,7 @@
 <h2>Flight Calendar - Cheapest fare</h2>
 <div class="flight-dd-container">
-  <div class="d-inline-block" ngbDropdown #oridinDrop="ngbDropdown">
-    <button class="btn btn-outline-primary mr-2 flight-dropdown-width" id="dropdownManual" ngbDropdownAnchor
+  <div class="d-inline-block flight-btn-padding" ngbDropdown #oridinDrop="ngbDropdown">
+    <button class="btn btn-primary flight-dropdown-width" id="dropdownManual" ngbDropdownAnchor
       (focus)="oridinDrop.open()">{{origin}}</button>
     <div ngbDropdownMenu aria-labelledby="dropdownManual">
       <button ngbDropdownItem value="SIN" (click)="changeOrigin($event)">Singapore</button>
@@ -9,8 +9,8 @@
     </div>
   </div>
 
-  <div class="d-inline-block" ngbDropdown #destinationDrop="ngbDropdown">
-    <button class="btn btn-outline-primary mr-2 flight-dropdown-width" id="dropdownManual" ngbDropdownAnchor
+  <div class="d-inline-block flight-btn-padding" ngbDropdown #destinationDrop="ngbDropdown">
+    <button class="btn btn-primary flight-dropdown-width" id="dropdownManual" ngbDropdownAnchor
       (focus)="destinationDrop.open()">{{destination}}</button>
     <div ngbDropdownMenu aria-labelledby="dropdownManual">
       <button ngbDropdownItem value="SIN" (click)="changeDestination($event)">Singapore</button>

@@ -2,4 +2,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    /* background-image: '../assets/bg.jpg */
+    background-image: url('../assets/airplane-983991_1280.jpg');
+    background-repeat: round;
 }
